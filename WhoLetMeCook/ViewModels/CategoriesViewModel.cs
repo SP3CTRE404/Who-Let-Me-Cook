@@ -13,9 +13,17 @@ public partial class CategoriesViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<Category> _categories = new();
+    [ObservableProperty]
+    private ObservableCollection<Areas> _Areass = new();
 
     [ObservableProperty]
     private bool _isBusy;
+
+    // These properties will control which list is visible in the UI
+    [ObservableProperty]
+    private bool _isCategoryFilterVisible = true; // Start by showing categories
+    [ObservableProperty]
+    private bool _isCuisineFilterVisible;
 
     public CategoriesViewModel(RecipeService recipeService)
     {
@@ -23,29 +31,46 @@ public partial class CategoriesViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task LoadCategoriesAsync()
+    private async Task LoadDataAsync()
     {
         if (IsBusy) return;
         try
         {
             IsBusy = true;
-            var categoryList = await _recipeService.GetAllCategoriesAsync();
+            var categoriesTask = _recipeService.GetAllCategoriesAsync();
+            var AreassTask = _recipeService.GetAllAreassAsync();
+
+            await Task.WhenAll(categoriesTask, AreassTask);
+
             Categories.Clear();
-            foreach (var category in categoryList)
-            {
-                Categories.Add(category);
-            }
+            foreach (var item in await categoriesTask) { Categories.Add(item); }
+
+            Areass.Clear();
+            foreach (var item in await AreassTask) { Areass.Add(item); }
         }
-        finally
-        {
-            IsBusy = false;
-        }
+        finally { IsBusy = false; }
+    }
+
+    // This command runs when a filter button is clicked
+    [RelayCommand]
+    private void SetCurrentFilter(string filter)
+    {
+        IsCategoryFilterVisible = filter == "Category";
+        IsCuisineFilterVisible = filter == "Cuisine";
     }
 
     [RelayCommand]
-    private async Task GoToRecipesAsync(Category category)
+    private async Task GoToRecipesAsync(object selectedItem)
     {
-        if (category == null) return;
-        await Shell.Current.GoToAsync($"{nameof(RecipePage)}?category={category.strCategory}");
+        if (selectedItem == null) return;
+
+        if (selectedItem is Category category)
+        {
+            await Shell.Current.GoToAsync($"{nameof(RecipePage)}?category={category.strCategory}");
+        }
+        else if (selectedItem is Areas Areas)
+        {
+            await Shell.Current.GoToAsync($"{nameof(RecipePage)}?Areas={Areas.strAreas}");
+        }
     }
 }

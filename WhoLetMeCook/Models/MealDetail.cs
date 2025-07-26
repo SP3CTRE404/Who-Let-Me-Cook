@@ -7,7 +7,7 @@ public class MealDetail
     public string? strMealThumb { get; set; }
     public string? strInstructions { get; set; }
     public string? strCategory { get; set; }
-    public string? strArea { get; set; }
+    public string? strAreas { get; set; }
 
     // Ingredients
     public string? strIngredient1 { get; set; }

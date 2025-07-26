@@ -15,9 +15,9 @@ public partial class CategoriesPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (_viewModel.LoadCategoriesCommand.CanExecute(null))
+        if (_viewModel.LoadDataCommand.CanExecute(null))
         {
-            await _viewModel.LoadCategoriesCommand.ExecuteAsync(null);
+            await _viewModel.LoadDataCommand.ExecuteAsync(null);
         }
     }
 }
