@@ -79,11 +79,11 @@ public partial class HomeViewModel : ObservableObject
         if (category == null) return;
         IsCategoryListVisible = false;
 
-        // NEW: Check if the user tapped our special "More" button.
+        // UPDATED LOGIC: Check if the user tapped our special "More" button.
         if (category.idCategory == "more")
         {
-            // If so, navigate to the RecipePage without any category filter.
-            await Shell.Current.GoToAsync(nameof(RecipePage));
+            // If so, navigate to our new CategoriesPage.
+            await Shell.Current.GoToAsync(nameof(CategoriesPage));
         }
         else
         {

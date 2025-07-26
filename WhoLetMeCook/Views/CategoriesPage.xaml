@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:WhoLetMeCook.Models"
+             xmlns:viewmodels="clr-namespace:WhoLetMeCook.ViewModels"
+             x:Class="WhoLetMeCook.Views.CategoriesPage"
+             x:DataType="viewmodels:CategoriesViewModel"
+             Title="All Categories">
+    <Grid>
+        <CollectionView ItemsSource="{Binding Categories}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Category">
+                    <Border Padding="10" Margin="10" Stroke="LightGray" StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="15">
+                            <Label Grid.Column="0" Text="{Binding strCategory}" VerticalOptions="Center" FontAttributes="Bold" />
+                            <Image Grid.Column="1" Source="{Binding strCategoryThumb}" Aspect="AspectFit" HeightRequest="60" WidthRequest="60" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}, Path=GoToRecipesCommand}"
+                                                      CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"/>
+    </Grid>
+</ContentPage>
