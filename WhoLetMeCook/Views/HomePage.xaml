@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:WhoLetMeCook.Models"
+             xmlns:viewmodels="clr-namespace:WhoLetMeCook.ViewModels"
+             x:Class="WhoLetMeCook.Views.HomePage"
+             x:DataType="viewmodels:HomeViewModel"
+             Title="Who Let Me Cook?">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="15" Padding="20">
+
+                <!-- This VerticalStackLayout is our custom dropdown -->
+                <VerticalStackLayout>
+                    <Label Text="Select a Category" FontAttributes="Bold" />
+                    <!-- This is the tappable header for the dropdown -->
+                    <Border Stroke="LightGray" StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="4"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleCategoryListCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="*, Auto" Padding="10, 8">
+                            <Label Grid.Column="0" Text="-- Browse Categories --" VerticalOptions="Center" />
+                            <!-- This label now rotates to indicate open/closed state -->
+                            <Label Grid.Column="1" Text="▼" VerticalOptions="Center" FontSize="12">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsCategoryListVisible}" Value="True">
+                                        <Setter Property="Text" Value="▲" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+                    </Border>
+
+                    <!-- FIX: The Margin has been removed from this Border -->
+                    <Border x:Name="CategoryListContainer"
+                            Stroke="LightGray" StrokeThickness="1" Padding="10"
+                            Opacity="0"
+                            ScaleY="0"
+                            AnchorY="0"
+                            InputTransparent="True">
+                        <FlexLayout BindableLayout.ItemsSource="{Binding Categories}"
+                                    Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="models:Category">
+                                    <Border Stroke="Orange" StrokeThickness="1" Padding="12,8" Margin="5">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="16"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding strCategory}" />
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HomeViewModel}}, Path=GoToRecipesCommand}"
+                                                                  CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- "Today's hot suggestion" Section -->
+                <Label Text="Today's Hot Suggestions"
+                       FontSize="Title"
+                       FontAttributes="Bold"
+                       Margin="0,20,0,0" />
+
+                <!-- The list of suggested recipes remains the same -->
+                <CollectionView ItemsSource="{Binding SuggestedMeals}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Meal">
+                            <Border Padding="10" Margin="0,5" Stroke="LightGray" StrokeThickness="1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                    <Label Grid.Column="0" Text="{Binding strMeal}" VerticalOptions="Center" FontAttributes="Bold" />
+                                    <Image Grid.Column="1" Source="{Binding strMealThumb}" Aspect="AspectFill" HeightRequest="60" WidthRequest="60" />
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HomeViewModel}}, Path=GoToRecipeDetailCommand}"
+                                                              CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"/>
+    </Grid>
+</ContentPage>

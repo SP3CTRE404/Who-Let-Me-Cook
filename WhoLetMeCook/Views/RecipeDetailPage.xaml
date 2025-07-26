@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:WhoLetMeCook.ViewModels"
+             x:Class="WhoLetMeCook.Views.RecipeDetailPage"
+             x:DataType="viewmodels:RecipeDetailViewModel"
+             Title="{Binding Recipe.strMeal}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Image Aspect="AspectFill"
+                   HeightRequest="250"
+                   Source="{Binding Recipe.strMealThumb}" />
+            <Label Text="{Binding Recipe.strMeal}"
+                   FontSize="Header"
+                   FontAttributes="Bold" />
+            <Label Text="{Binding Recipe.strCategory, StringFormat='Category: {0}'}"
+                   FontSize="Subtitle" />
+            <Label Text="Instructions"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,5"/>
+            <Label Text="{Binding Recipe.strInstructions}" />
+            <Label Text="Ingredients"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,5"/>
+            <CollectionView ItemsSource="{Binding Ingredients}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding}" Margin="0,2"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
