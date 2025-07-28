@@ -41,11 +41,11 @@
                                     Opacity="0">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate x:DataType="models:Category">
-                                    <Border Stroke="Goldenrod" StrokeThickness="1" Padding="12,8" Margin="5">
+                                    <Border Stroke="Goldenrod" Background="Wheat" StrokeThickness="1" Padding="12,8" Margin="2">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="16"/>
                                         </Border.StrokeShape>
-                                        <Label Text="{Binding strCategory}" />
+                                        <Label Text="{Binding strCategory}" TextColor="Sienna"/>
                                         <Border.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HomeViewModel}}, Path=GoToRecipesCommand}"
                                                                   CommandParameter="{Binding .}" />
