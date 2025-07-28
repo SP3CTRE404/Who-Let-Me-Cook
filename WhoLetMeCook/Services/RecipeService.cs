@@ -88,8 +88,8 @@ public class RecipeService
         return new List<Meal>();
     }
 
-    // New method to get all Areass (Cuisines)
-    public async Task<List<Areas>> GetAllAreassAsync()
+    // New method to get all Areas (Cuisines)
+    public async Task<List<Areas>> GetAllAreasAsync()
     {
         try
         {
@@ -101,7 +101,7 @@ public class RecipeService
                 return apiResponse?.Meals ?? new List<Areas>();
             }
         }
-        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error fetching Areass: {ex.Message}"); }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error fetching Areas: {ex.Message}"); }
         return new List<Areas>();
     }
 

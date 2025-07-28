@@ -25,19 +25,20 @@ public partial class HomePage : ContentPage
 
     private async void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
+        // We only care if the IsCategoryListVisible property changed.
         if (e.PropertyName == nameof(HomeViewModel.IsCategoryListVisible))
         {
             if (_viewModel.IsCategoryListVisible)
             {
-                CategoryListContainer.InputTransparent = false;
-                await CategoryListContainer.ScaleYTo(1, 250, Easing.SinOut);
-                await CategoryListContainer.FadeTo(1, 100);
+                // Animate In: Make it visible, then fade it in.
+                CategoryBubblesContainer.IsVisible = true;
+                await CategoryBubblesContainer.FadeTo(1, 250, Easing.SinOut);
             }
             else
             {
-                await CategoryListContainer.FadeTo(0, 100);
-                await CategoryListContainer.ScaleYTo(0, 250, Easing.SinIn);
-                CategoryListContainer.InputTransparent = true;
+                // Animate Out: Fade it out, then make it invisible.
+                await CategoryBubblesContainer.FadeTo(0, 250, Easing.SinIn);
+                CategoryBubblesContainer.IsVisible = false;
             }
         }
     }

@@ -14,7 +14,7 @@ public partial class CategoriesViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Category> _categories = new();
     [ObservableProperty]
-    private ObservableCollection<Areas> _Areass = new();
+    private ObservableCollection<Areas> _Areas = new();
 
     [ObservableProperty]
     private bool _isBusy;
@@ -38,15 +38,15 @@ public partial class CategoriesViewModel : ObservableObject
         {
             IsBusy = true;
             var categoriesTask = _recipeService.GetAllCategoriesAsync();
-            var AreassTask = _recipeService.GetAllAreassAsync();
+            var AreasTask = _recipeService.GetAllAreasAsync();
 
-            await Task.WhenAll(categoriesTask, AreassTask);
+            await Task.WhenAll(categoriesTask, AreasTask);
 
             Categories.Clear();
             foreach (var item in await categoriesTask) { Categories.Add(item); }
 
-            Areass.Clear();
-            foreach (var item in await AreassTask) { Areass.Add(item); }
+            Areas.Clear();
+            foreach (var item in await AreasTask) { Areas.Add(item); }
         }
         finally { IsBusy = false; }
     }

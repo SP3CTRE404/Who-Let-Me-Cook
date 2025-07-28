@@ -6,8 +6,8 @@ using WhoLetMeCook.Services;
 
 namespace WhoLetMeCook.ViewModels;
 
-[QueryProperty(nameof(Areas), "Areas")]
 [QueryProperty(nameof(Category), "category")]
+[QueryProperty(nameof(Areas), "area")]
 public partial class RecipesViewModel : ObservableObject
 {
     private readonly RecipeService _recipeService;
@@ -21,28 +21,30 @@ public partial class RecipesViewModel : ObservableObject
 
     [ObservableProperty]
     private string _category;
-    [ObservableProperty]
-    private string _Areas;
 
-    public RecipesViewModel(RecipeService recipeService)
-    {
-        _recipeService = recipeService;
-    }
+    [ObservableProperty]
+    private string _area;
 
     partial void OnCategoryChanged(string value)
     {
         if (!string.IsNullOrEmpty(value))
         {
-            Task.Run(async () => await LoadMealsByCategoryAsync());
+
+            _ = LoadMealsByCategoryAsync();
         }
     }
 
-    partial void OnAreasChanged(string value)
+    partial void OnAreaChanged(string value)
     {
         if (!string.IsNullOrEmpty(value))
         {
-            Task.Run(async () => await LoadMealsByAreasAsync());
+            _ = LoadMealsByAreaAsync();
         }
+    }
+
+    public RecipesViewModel(RecipeService recipeService)
+    {
+        _recipeService = recipeService;
     }
 
     private async Task LoadMealsByCategoryAsync()
@@ -52,19 +54,21 @@ public partial class RecipesViewModel : ObservableObject
         {
             IsBusy = true;
             var mealList = await _recipeService.GetMealsByCategory(Category);
+
             Meals.Clear();
             foreach (var meal in mealList) { Meals.Add(meal); }
         }
         finally { IsBusy = false; }
     }
 
-    private async Task LoadMealsByAreasAsync()
+    private async Task LoadMealsByAreaAsync()
     {
         if (IsBusy) return;
         try
         {
             IsBusy = true;
-            var mealList = await _recipeService.GetMealsByAreasAsync(Areas);
+            var mealList = await _recipeService.GetMealsByAreasAsync(Area);
+
             Meals.Clear();
             foreach (var meal in mealList) { Meals.Add(meal); }
         }
@@ -79,6 +83,7 @@ public partial class RecipesViewModel : ObservableObject
         {
             IsBusy = true;
             var mealList = await _recipeService.SearchMealsByName(SearchText);
+
             Meals.Clear();
             foreach (var meal in mealList) { Meals.Add(meal); }
         }

@@ -10,7 +10,7 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Shell">
-                <Setter Property="Shell.BackgroundColor" Value="Orange" />
+                <Setter Property="Shell.BackgroundColor" Value="Brown" />
                 <Setter Property="Shell.TitleColor" Value="White" />
                 <Setter Property="Shell.ForegroundColor" Value="White" />
             </Style>
