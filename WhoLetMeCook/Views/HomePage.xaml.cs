@@ -25,7 +25,6 @@ public partial class HomePage : ContentPage
 
     private async void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        // We only care if the IsCategoryListVisible property changed.
         if (e.PropertyName == nameof(HomeViewModel.IsCategoryListVisible))
         {
             if (_viewModel.IsCategoryListVisible)

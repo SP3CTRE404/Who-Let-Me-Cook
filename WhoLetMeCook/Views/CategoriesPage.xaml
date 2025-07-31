@@ -6,12 +6,47 @@
              x:Class="WhoLetMeCook.Views.CategoriesPage"
              x:DataType="viewmodels:CategoriesViewModel"
              Title="Browse All"
-             Background="Brown">
+             BackgroundColor="Brown">
     <Grid RowDefinitions="Auto, *">
         <!-- Filter Buttons -->
         <HorizontalStackLayout Grid.Row="0" Spacing="10" Padding="10" HorizontalOptions="Center">
-            <Button Text="Category" Command="{Binding SetCurrentFilterCommand}" CommandParameter="Category" BackgroundColor="Wheat" TextTransform="Uppercase" FontAttributes="Bold" FontSize="Medium"/>
-            <Button Text="Cuisine" Command="{Binding SetCurrentFilterCommand}" CommandParameter="Cuisine" BackgroundColor="Wheat" TextTransform="Uppercase" FontAttributes="Bold" FontSize="Medium"/>
+
+            <Button Text="DISH" 
+                    Command="{Binding SetCurrentFilterCommand}" 
+                    CommandParameter="Category" 
+                    BackgroundColor="Transparent" 
+                    TextColor="Gold"
+                    TextTransform="Uppercase"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    BorderWidth="2"
+                    BorderColor="Goldenrod">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsCategoryFilterVisible}" Value="True">
+                        <Setter Property="BackgroundColor" Value="Goldenrod"/>
+                        <Setter Property="TextColor" Value="Black"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            
+            <Button Text="Cuisine" 
+                    Command="{Binding SetCurrentFilterCommand}" 
+                    CommandParameter="Cuisine"
+                    BackgroundColor="Transparent"
+                    TextColor="Gold"
+                    TextTransform="Uppercase"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    BorderWidth="2"
+                    BorderColor="Goldenrod">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsCuisineFilterVisible}" Value="True">
+                        <Setter Property="BackgroundColor" Value="Goldenrod"/>
+                        <Setter Property="TextColor" Value="Black"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
         </HorizontalStackLayout>
 
         <!-- Category List -->
@@ -37,13 +72,13 @@
         <!-- Cuisine (Area) List -->
         <CollectionView Grid.Row="1" ItemsSource="{Binding Areas}" IsVisible="{Binding IsCuisineFilterVisible}" SelectionMode="None">
             <CollectionView.ItemTemplate>
+                <!-- FIX: Corrected the typo from "models:Areas" to "models:Area" -->
                 <DataTemplate x:DataType="models:Areas">
-                    <Border Padding="10" Margin="10,5" Stroke="LightGray" StrokeThickness="1" >
+                    <Border Padding="10" Margin="10,5" Stroke="Goldenrod" StrokeThickness="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
-                        <!-- FIX: Added TextColor="White" to make the label visible -->
-                        <Label Text="{Binding strArea}" VerticalOptions="Center" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="{Binding strAreas}" VerticalOptions="Center" FontAttributes="Bold" TextColor="NavajoWhite" FontSize="Medium" />
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}, Path=GoToRecipesCommand}" CommandParameter="{Binding .}" />
                         </Border.GestureRecognizers>

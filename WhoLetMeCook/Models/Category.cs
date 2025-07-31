@@ -9,7 +9,6 @@ public class Category
     public string strCategoryDescription { get; set; }
 }
 
-// Just like before, the API wraps the list in a parent object.
 // The API sends {"categories": [...]}, so our property is named "Categories".
 public class CategoryAPIResponse
 {

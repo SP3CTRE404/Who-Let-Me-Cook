@@ -46,8 +46,6 @@ public partial class HomeViewModel : ObservableObject
                 Categories.Add(category);
             }
 
-            // NEW: Add our special "More" category at the end of the list.
-            // We give it a unique ID so we can identify it later.
             Categories.Add(new Category { strCategory = "More", idCategory = "more" });
 
 
@@ -79,7 +77,6 @@ public partial class HomeViewModel : ObservableObject
         if (category == null) return;
         IsCategoryListVisible = false;
 
-        // UPDATED LOGIC: Check if the user tapped our special "More" button.
         if (category.idCategory == "more")
         {
             // If so, navigate to our new CategoriesPage.

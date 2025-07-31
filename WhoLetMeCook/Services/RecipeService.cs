@@ -88,24 +88,6 @@ public class RecipeService
         return new List<Meal>();
     }
 
-    // New method to get all Areas (Cuisines)
-    public async Task<List<Areas>> GetAllAreasAsync()
-    {
-        try
-        {
-            var response = await _httpClient.GetAsync("list.php?a=list");
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                var apiResponse = JsonSerializer.Deserialize<AreasAPIResponse>(jsonString, _jsonSerializerOptions);
-                return apiResponse?.Meals ?? new List<Areas>();
-            }
-        }
-        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error fetching Areas: {ex.Message}"); }
-        return new List<Areas>();
-    }
-
-    // New method to get meals filtered by Areas (Cuisine)
     public async Task<List<Meal>> GetMealsByAreasAsync(string Areas)
     {
         if (string.IsNullOrEmpty(Areas)) return new List<Meal>();

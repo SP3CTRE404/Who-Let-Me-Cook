@@ -7,7 +7,7 @@ using WhoLetMeCook.Services;
 namespace WhoLetMeCook.ViewModels;
 
 [QueryProperty(nameof(Category), "category")]
-[QueryProperty(nameof(Areas), "area")]
+[QueryProperty(nameof(Areas), "Areas")]
 public partial class RecipesViewModel : ObservableObject
 {
     private readonly RecipeService _recipeService;
@@ -23,7 +23,7 @@ public partial class RecipesViewModel : ObservableObject
     private string _category;
 
     [ObservableProperty]
-    private string _area;
+    private string _Areas;
 
     partial void OnCategoryChanged(string value)
     {
@@ -34,11 +34,11 @@ public partial class RecipesViewModel : ObservableObject
         }
     }
 
-    partial void OnAreaChanged(string value)
+    partial void OnAreasChanged(string value)
     {
         if (!string.IsNullOrEmpty(value))
         {
-            _ = LoadMealsByAreaAsync();
+            _ = LoadMealsByAreasAsync();
         }
     }
 
@@ -61,13 +61,13 @@ public partial class RecipesViewModel : ObservableObject
         finally { IsBusy = false; }
     }
 
-    private async Task LoadMealsByAreaAsync()
+    private async Task LoadMealsByAreasAsync()
     {
         if (IsBusy) return;
         try
         {
             IsBusy = true;
-            var mealList = await _recipeService.GetMealsByAreasAsync(Area);
+            var mealList = await _recipeService.GetMealsByAreasAsync(Areas);
 
             Meals.Clear();
             foreach (var meal in mealList) { Meals.Add(meal); }

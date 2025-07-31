@@ -7,28 +7,35 @@
              Title="{Binding Recipe.strMeal}">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20">
+        <VerticalStackLayout Spacing="15" Padding="20" BackgroundColor="Brown">
             <Image Aspect="AspectFill"
-                   HeightRequest="250"
-                   Source="{Binding Recipe.strMealThumb}" />
+                   HeightRequest="200"
+                   Source="{Binding Recipe.strMealThumb}"
+                   />
             <Label Text="{Binding Recipe.strMeal}"
-                   FontSize="Header"
-                   FontAttributes="Bold" />
+                   FontSize="Title"
+                   FontAttributes="Bold" 
+                   TextColor="PaleGoldenrod"/>
             <Label Text="{Binding Recipe.strCategory, StringFormat='Category: {0}'}"
-                   FontSize="Subtitle" />
+                   FontSize="Subtitle" 
+                   TextColor="NavajoWhite"/>
             <Label Text="Instructions"
                    FontSize="Title"
                    FontAttributes="Bold"
-                   Margin="0,20,0,5"/>
-            <Label Text="{Binding Recipe.strInstructions}" />
+                   Margin="0,20,0,5"
+                   TextColor="NavajoWhite"
+                   />
+            <Label Text="{Binding Recipe.strInstructions}" TextColor="NavajoWhite"/>
             <Label Text="Ingredients"
                    FontSize="Title"
                    FontAttributes="Bold"
-                   Margin="0,20,0,5"/>
+                   Margin="0,20,0,5"
+                   TextColor="NavajoWhite"/>
             <CollectionView ItemsSource="{Binding Ingredients}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding}" Margin="0,2"/>
+                        <Label Text="{Binding}" Margin="0,2"
+                               TextColor="NavajoWhite"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -4,7 +4,7 @@
              xmlns:models="clr-namespace:WhoLetMeCook.Models"
              x:Class="WhoLetMeCook.Views.RecipePage">
 
-    <Grid RowDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, *" BackgroundColor="Brown">
         <SearchBar Grid.Row="0"
                    Placeholder="Search for a recipe..."
                    Text="{Binding SearchText}"
@@ -16,7 +16,7 @@
                         SelectionChanged="OnRecipeTapped">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Meal">
-                    <Border Padding="10" Margin="10" Stroke="LightGray" StrokeThickness="1">
+                    <Border Padding="10" Margin="10" Stroke="Goldenrod" StrokeThickness="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8"/>
                         </Border.StrokeShape>
@@ -31,7 +31,9 @@
                             <Label Grid.Row="1"
                                    Text="{Binding strMeal}"
                                    FontAttributes="Bold"
-                                   VerticalOptions="Center" />
+                                   VerticalOptions="Center"
+                                   FontSize="Medium"
+                                   TextColor="NavajoWhite"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
