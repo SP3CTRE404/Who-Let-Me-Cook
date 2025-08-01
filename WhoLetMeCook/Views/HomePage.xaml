@@ -35,17 +35,17 @@
                         <!-- The Category Bubbles Container -->
                         <FlexLayout x:Name="CategoryBubblesContainer"
                                     BindableLayout.ItemsSource="{Binding Categories}"
-                                    Wrap="Wrap" JustifyContent="Start" AlignItems="Start"
-                                    Padding="5"
+                                    Wrap="Wrap" JustifyContent="Start" AlignItems="Stretch"
+                                    Padding="15"
                                     IsVisible="False"
                                     Opacity="0">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate x:DataType="models:Category">
-                                    <Border Stroke="Goldenrod" Background="Wheat" StrokeThickness="1" Padding="12,8" Margin="2">
+                                    <Border Stroke="Goldenrod" Background="Wheat" StrokeThickness="1" Padding="12,7" Margin="2">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="16"/>
                                         </Border.StrokeShape>
-                                        <Label Text="{Binding strCategory}" TextColor="Sienna"/>
+                                        <Label Text="{Binding strCategory}" TextColor="Brown" FontSize="Small" FontAttributes="Bold"/>
                                         <Border.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HomeViewModel}}, Path=GoToRecipesCommand}"
                                                                   CommandParameter="{Binding .}" />

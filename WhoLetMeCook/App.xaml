@@ -11,8 +11,7 @@
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Shell">
                 <Setter Property="Shell.BackgroundColor" Value="Brown" />
-                <Setter Property="Shell.TitleColor" Value="White" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="NavajoWhite" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

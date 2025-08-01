@@ -4,6 +4,7 @@
 public class Areas
 {
     public string? strAreas { get; set; }
+    public string FlagUrl { get; set; }
 }
 
 // The API wraps the list in a "meals" property, even for Areas.

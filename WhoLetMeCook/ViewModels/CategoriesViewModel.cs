@@ -12,10 +12,10 @@ public partial class CategoriesViewModel : ObservableObject
     private readonly RecipeService _recipeService;
 
     [ObservableProperty]
-    private static readonly ObservableCollection<Category> _categories = new();
+    private ObservableCollection<Category> _categories = new();
 
     [ObservableProperty]
-    private static readonly ObservableCollection<Areas> _Areas = new();
+    private ObservableCollection<Areas> _Areas = new();
 
     [ObservableProperty]
     private bool _isBusy;
@@ -34,17 +34,17 @@ public partial class CategoriesViewModel : ObservableObject
 
     private void CreatePredefinedCuisineList()
     {
-        Areas.Add(new Areas { strAreas = "American" });
-        Areas.Add(new Areas { strAreas = "British" });
-        Areas.Add(new Areas { strAreas = "Canadian" });
-        Areas.Add(new Areas { strAreas = "Chinese" });
-        Areas.Add(new Areas { strAreas = "French" });
-        Areas.Add(new Areas { strAreas = "Indian" });
-        Areas.Add(new Areas { strAreas = "Italian" });
-        Areas.Add(new Areas { strAreas = "Japanese" });
-        Areas.Add(new Areas { strAreas = "Mexican" });
-        Areas.Add(new Areas { strAreas = "Spanish" });
-        Areas.Add(new Areas { strAreas = "Thai" });
+        Areas.Add(new Areas { strAreas = "American", FlagUrl = "https://flagcdn.com/w40/us.png" });
+        Areas.Add(new Areas { strAreas = "British", FlagUrl = "https://flagcdn.com/w40/gb.png" });
+        Areas.Add(new Areas { strAreas = "Canadian", FlagUrl = "https://flagcdn.com/w40/ca.png" });
+        Areas.Add(new Areas { strAreas = "Chinese", FlagUrl = "https://flagcdn.com/w40/cn.png" });
+        Areas.Add(new Areas { strAreas = "French", FlagUrl = "https://flagcdn.com/w40/fr.png" });
+        Areas.Add(new Areas { strAreas = "Indian", FlagUrl = "https://flagcdn.com/w40/in.png" });
+        Areas.Add(new Areas { strAreas = "Italian", FlagUrl = "https://flagcdn.com/w40/it.png" });
+        Areas.Add(new Areas { strAreas = "Japanese", FlagUrl = "https://flagcdn.com/w40/jp.png" });
+        Areas.Add(new Areas { strAreas = "Mexican", FlagUrl = "https://flagcdn.com/w40/mx.png" });
+        Areas.Add(new Areas { strAreas = "Spanish", FlagUrl = "https://flagcdn.com/w40/es.png" });
+        Areas.Add(new Areas { strAreas = "Thai", FlagUrl = "https://flagcdn.com/w40/th.png" });
     }
 
     [RelayCommand]

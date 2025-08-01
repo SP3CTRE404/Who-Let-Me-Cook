@@ -70,15 +70,27 @@
         </CollectionView>
 
         <!-- Cuisine (Area) List -->
+        <!-- Cuisine (Area) List -->
         <CollectionView Grid.Row="1" ItemsSource="{Binding Areas}" IsVisible="{Binding IsCuisineFilterVisible}" SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <!-- FIX: Corrected the typo from "models:Areas" to "models:Area" -->
                 <DataTemplate x:DataType="models:Areas">
                     <Border Padding="10" Margin="10,5" Stroke="Goldenrod" StrokeThickness="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
-                        <Label Text="{Binding strAreas}" VerticalOptions="Center" FontAttributes="Bold" TextColor="NavajoWhite" FontSize="Medium" />
+                        <!-- NEW: Using a Grid to position the flag and the name -->
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                            <Image Grid.Column="0"
+                                   Source="{Binding FlagUrl}"
+                                   HeightRequest="30"
+                                   WidthRequest="40"                                   Aspect="AspectFill" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding strAreas}" 
+                                   VerticalOptions="Center" 
+                                   FontAttributes="Bold" 
+                                   TextColor="NavajoWhite" 
+                                   FontSize="Medium" />
+                        </Grid>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}, Path=GoToRecipesCommand}" CommandParameter="{Binding .}" />
                         </Border.GestureRecognizers>
@@ -86,6 +98,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
 
         <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"/>
     </Grid>
