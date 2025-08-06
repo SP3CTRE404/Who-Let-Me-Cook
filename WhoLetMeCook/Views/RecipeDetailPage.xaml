@@ -4,41 +4,45 @@
              xmlns:viewmodels="clr-namespace:WhoLetMeCook.ViewModels"
              x:Class="WhoLetMeCook.Views.RecipeDetailPage"
              x:DataType="viewmodels:RecipeDetailViewModel"
-             Title="{Binding Recipe.strMeal}">
+             Title="{Binding Recipe.strMeal}"
+             BackgroundColor="Brown">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20" BackgroundColor="Brown">
+        <VerticalStackLayout Spacing="15" Padding="20">
             <Image Aspect="AspectFill"
-                   HeightRequest="200"
-                   Source="{Binding Recipe.strMealThumb}"
-                   />
+                   HeightRequest="250"
+                   Source="{Binding Recipe.strMealThumb}" />
             <Label Text="{Binding Recipe.strMeal}"
-                   FontSize="Title"
-                   FontAttributes="Bold" 
-                   TextColor="PaleGoldenrod"/>
-            <Label Text="{Binding Recipe.strCategory, StringFormat='Category: {0}'}"
-                   FontSize="Subtitle" 
+                   FontSize="Header"
+                   FontAttributes="Bold"
                    TextColor="NavajoWhite"/>
+            <Label Text="{Binding Recipe.strCategory, StringFormat='Category: {0}'}"
+                   FontSize="Subtitle"
+                   TextColor="Wheat"/>
+
             <Label Text="Instructions"
                    FontSize="Title"
                    FontAttributes="Bold"
-                   Margin="0,20,0,5"
                    TextColor="NavajoWhite"
-                   />
-            <Label Text="{Binding Recipe.strInstructions}" TextColor="NavajoWhite"/>
+                   Margin="0,20,0,5"/>
+            <Label Text="{Binding Recipe.strInstructions}" TextColor="Wheat" />
+
+            <!-- This section displays the ingredients list -->
             <Label Text="Ingredients"
                    FontSize="Title"
                    FontAttributes="Bold"
-                   Margin="0,20,0,5"
-                   TextColor="NavajoWhite"/>
-            <CollectionView ItemsSource="{Binding Ingredients}">
-                <CollectionView.ItemTemplate>
+                   TextColor="NavajoWhite"
+                   Margin="0,20,0,5"/>
+
+            <!-- FIX: Replaced CollectionView with a more reliable BindableLayout -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}">
+                <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding}" Margin="0,2"
-                               TextColor="NavajoWhite"/>
+                        <Label Text="{Binding}" Margin="0,2" TextColor="Wheat"/>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
