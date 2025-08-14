@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Text.RegularExpressions;
 using WhoLetMeCook.Models;
 using WhoLetMeCook.Services;
 
@@ -10,54 +11,154 @@ namespace WhoLetMeCook.ViewModels;
 public partial class RecipeDetailViewModel : ObservableObject
 {
     private readonly RecipeService _recipeService;
+    private readonly AIService _aiService;
 
     [ObservableProperty]
     private MealDetail _recipe;
 
-    public ObservableCollection<string> Ingredients { get; } = new();
-
     [ObservableProperty]
     private string _recipeId;
 
-    public RecipeDetailViewModel(RecipeService recipeService)
+    [ObservableProperty]
+    private ObservableCollection<string> _simplifiedIngredients = new();
+
+    [ObservableProperty]
+    private ObservableCollection<string> _simplifiedInstructions = new();
+
+    [ObservableProperty]
+    private int _servingSize = 1;
+
+    [ObservableProperty]
+    private bool _isBusy;
+
+    private bool _isInitialLoad = true;
+
+    public RecipeDetailViewModel(RecipeService recipeService, AIService aiService)
     {
         _recipeService = recipeService;
+        _aiService = aiService;
     }
 
-    [RelayCommand]
+    async partial void OnRecipeIdChanged(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            _isInitialLoad = true;
+            ServingSize = 1;
+            await LoadRecipeDetailsAsync();
+        }
+    }
+
+    async partial void OnServingSizeChanged(int value)
+    {
+        if (!_isInitialLoad)
+        {
+            await LoadSimplifiedRecipeAsync();
+        }
+    }
+
     private async Task LoadRecipeDetailsAsync()
     {
-        if (string.IsNullOrEmpty(RecipeId)) return;
-
-        // 1. Fetch the data in the background.
-        var recipeDetail = await _recipeService.GetMealDetails(RecipeId);
-
-        if (recipeDetail != null)
+        if (IsBusy) return;
+        try
         {
-            // 2. Prepare the list of ingredients in the background.
-            var ingredientsList = new List<string>();
+            IsBusy = true;
+            var recipeDetail = await _recipeService.GetMealDetails(RecipeId);
+            if (recipeDetail != null)
+            {
+                Recipe = recipeDetail;
+                await LoadSimplifiedRecipeAsync();
+            }
+        }
+        finally
+        {
+            IsBusy = false;
+            _isInitialLoad = false;
+        }
+    }
+
+    private async Task LoadSimplifiedRecipeAsync()
+    {
+        if (Recipe == null) return;
+
+        IsBusy = true;
+        try
+        {
+            var ingredientsBuilder = new StringBuilder();
             for (int i = 1; i <= 20; i++)
             {
-                var ingredient = (string)typeof(MealDetail).GetProperty($"strIngredient{i}")?.GetValue(recipeDetail);
-                var measure = (string)typeof(MealDetail).GetProperty($"strMeasure{i}")?.GetValue(recipeDetail);
+                var ingredient = (string)typeof(MealDetail).GetProperty($"strIngredient{i}")?.GetValue(Recipe);
+                var measure = (string)typeof(MealDetail).GetProperty($"strMeasure{i}")?.GetValue(Recipe);
                 if (!string.IsNullOrWhiteSpace(ingredient))
                 {
-                    ingredientsList.Add($"{measure} {ingredient}".Trim());
+                    ingredientsBuilder.AppendLine($"{measure} {ingredient}".Trim());
                 }
             }
 
-            // 3. Now, hand everything over to the UI thread to update the screen.
-            // This is the safest way to update the UI.
+            var simplifiedText = await _aiService.SimplifyRecipeAsync(Recipe.strInstructions, ingredientsBuilder.ToString(), ServingSize);
+            await ParseCombinedRecipeText(simplifiedText);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading simplified recipe: {ex.Message}");
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Recipe = recipeDetail;
-                Ingredients.Clear();
-                foreach (var item in ingredientsList)
-                {
-                    Ingredients.Add(item);
-                }
-                System.Diagnostics.Debug.WriteLine($"--- FINAL CHECK: Ingredients collection now has {Ingredients.Count} items.");
+                SimplifiedIngredients.Clear();
+                SimplifiedInstructions.Clear();
+                SimplifiedInstructions.Add("Failed to adjust recipe.");
             });
         }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task ParseCombinedRecipeText(string combinedText)
+    {
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            SimplifiedIngredients.Clear();
+            SimplifiedInstructions.Clear();
+
+            if (string.IsNullOrWhiteSpace(combinedText))
+            {
+                SimplifiedInstructions.Add("Could not retrieve recipe details.");
+                return;
+            }
+
+            int ingredientsIndex = combinedText.IndexOf("Ingredients:", StringComparison.OrdinalIgnoreCase);
+            int instructionsIndex = combinedText.IndexOf("Instructions:", StringComparison.OrdinalIgnoreCase);
+
+            if (ingredientsIndex != -1 && instructionsIndex != -1)
+            {
+                string ingredientsSection = combinedText.Substring(ingredientsIndex + "Ingredients:".Length, instructionsIndex - (ingredientsIndex + "Ingredients:".Length)).Trim();
+                string instructionsSection = combinedText.Substring(instructionsIndex + "Instructions:".Length).Trim();
+
+                var ingredients = ingredientsSection.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var item in ingredients)
+                {
+                    var cleanItem = item.Trim().TrimStart('-', '*').Trim();
+                    if (!string.IsNullOrWhiteSpace(cleanItem))
+                    {
+                        SimplifiedIngredients.Add(cleanItem);
+                    }
+                }
+
+                var instructions = instructionsSection.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var item in instructions)
+                {
+                    var cleanItem = Regex.Replace(item.Trim(), @"^\d+\.\s*", "");
+                    if (!string.IsNullOrWhiteSpace(cleanItem))
+                    {
+                        SimplifiedInstructions.Add(cleanItem);
+                    }
+                }
+            }
+            else
+            {
+                SimplifiedInstructions.Add(combinedText);
+            }
+        });
     }
 }

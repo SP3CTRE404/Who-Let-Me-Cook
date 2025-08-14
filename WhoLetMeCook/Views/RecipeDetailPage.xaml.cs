@@ -4,23 +4,14 @@ namespace WhoLetMeCook.Views;
 
 public partial class RecipeDetailPage : ContentPage
 {
-    private readonly RecipeDetailViewModel _viewModel;
-
+    // The corresponding ViewModel is automatically injected by the MAUI dependency
+    // injection container when this page is navigated to.
     public RecipeDetailPage(RecipeDetailViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = viewModel;
-        BindingContext = _viewModel;
-    }
 
-    // This method runs on the UI thread when the page is about to appear.
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        // We safely call the command to load the recipe details.
-        if (_viewModel.LoadRecipeDetailsCommand.CanExecute(null))
-        {
-            await _viewModel.LoadRecipeDetailsCommand.ExecuteAsync(null);
-        }
+        // Set the BindingContext of the page to the injected ViewModel instance.
+        // This allows the XAML to bind to the properties and commands in the ViewModel.
+        BindingContext = viewModel;
     }
 }
